@@ -6,6 +6,7 @@ import { Footer } from "../Components/layout/Footer"
 import { RegistroDiario } from '../Components/RegistroDiario'
 import { HistorialRegistros } from '../Components/HistorialRegistros'
 import { Estadisticas } from '../Components/Estadisticas'
+import { Profile } from '../Components/Profile'
 
 
 
@@ -21,6 +22,7 @@ export const MyRoutes = () => {
             <Route path="/registro-diario" element={<RegistroDiario />}></Route>
             <Route path="/historial-registros" element={<HistorialRegistros />}></Route>
             <Route path="/estadisticas" element={<Estadisticas />}></Route>
+            <Route path="/perfil" element={<Profile />}></Route>
             <Route path="*" element={
               <div className='page'>
                 <h1 className='heading'>Error 404</h1>
