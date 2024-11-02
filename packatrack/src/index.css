@@ -24,6 +24,11 @@ code {
   padding: 20px;
 }
 
+.home-logo {
+  width: 120px;
+  margin-bottom: 20px;
+}
+
 h1 {
   font-size: 2.5rem;
   margin-bottom: 20px;
@@ -90,23 +95,15 @@ p {
   color: #ffffff;
   padding: 10px 20px;
   border-radius: 5px;
+  border: none;
   text-decoration: none;
   font-size: 1rem;
   transition: background-color 0.3s;
+  cursor: pointer;
 }
 
 .nav-button:hover {
   background-color: #2980b9;
-}
-
-.footer {
-  text-align: center;
-  padding: 15px;
-  background-color: #f8f8f8;
-  color: #2c3e50;
-  font-size: 0.9rem;
-  border-top: 1px solid #e0e0e0;
-  font-family: 'Helvetica Neue', Arial, sans-serif;
 }
 
 @media (max-width: 768px) {
@@ -128,6 +125,17 @@ p {
   .nav-button {
       width: 100%;
       text-align: center;
-      padding: 15px 0;
+      padding: 10px 0;
+      font-size: 0.9rem;
   }
+}
+
+.footer {
+  text-align: center;
+  padding: 15px;
+  background-color: #f8f8f8;
+  color: #2c3e50;
+  font-size: 0.9rem;
+  border-top: 1px solid #e0e0e0;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
 }

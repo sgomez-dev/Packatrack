@@ -1,5 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import logo from '../packatrack.png';
 import '../index.css'; 
 
 export const Home = () => {
@@ -11,6 +12,7 @@ export const Home = () => {
 
     return (
         <div className="home-container">
+            <img src={logo} alt="Logo" className="home-logo" />
             <h1>Bienvenido al Control de Paquetes</h1>
             <p>Selecciona lo que deseas hacer:</p>
             <div className="home-buttons">
