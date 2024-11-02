@@ -113,17 +113,17 @@ p {
   .nav-links {
       display: none;
       flex-direction: column;
-      width: 100%;
+      width: 100px;
       padding: 0;
   }
   .nav-links.open {
       display: flex;
   }
   .nav-links li {
-      width: 100%;
+      width: 100px;
   }
   .nav-button {
-      width: 100%;
+      width: 100px;
       text-align: center;
       padding: 10px 0;
       font-size: 0.9rem;
