@@ -17,22 +17,21 @@ code {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 100vh;
+  height: 80vh;
   background-color: #101d27;
   color: #d7d7c3;
   font-family: 'Helvetica Neue', Arial, sans-serif;
-  padding: 20px;
 }
 
 .home-logo {
   width: 120px;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
   border-radius: 16px;
 }
 
 h1 {
   font-size: 2.5rem;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 }
 
 p {
@@ -134,6 +133,7 @@ p {
 }
 
 .footer {
+  height: 100%;
   text-align: center;
   padding: 15px;
   background-color: #101d27;
