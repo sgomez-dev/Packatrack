@@ -1,4 +1,6 @@
 import React, { useState } from 'react'
+import { db } from './firebase.config';
+import { collection, addDoc } from 'firebase/firestore';
 
 export const RegistroDiario = () => {
   const [cantidadPaquetes, setCantidadPaquetes] = useState(0)
@@ -9,7 +11,7 @@ export const RegistroDiario = () => {
   // Calculo del dinero recaudado
   const dineroRecaudado = paquetesEntregados * 0.50
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
 
     const nuevoRegistro = {
@@ -20,12 +22,19 @@ export const RegistroDiario = () => {
       dineroRecaudado,
     }
 
-    alert('Registro guardado con éxito!')
+    try {
+      await addDoc(collection(db, 'registros'), nuevoRegistro)
+      console.log('Registro guardado con éxito!', nuevoRegistro)
+      alert('Registro guardado con éxito!')
+      
 
-    setCantidadPaquetes(0)
-    setIncidencias(0)
-    setPaquetesEntregados(0)
-    setDiaEntrega('')
+      setCantidadPaquetes(0)
+      setIncidencias(0)
+      setPaquetesEntregados(0)
+      setDiaEntrega('')
+    } catch (error) {
+      alert('Error al guardar el registro: ', error.message)
+    }
   }
 
   return (
