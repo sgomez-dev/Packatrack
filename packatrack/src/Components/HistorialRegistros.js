@@ -11,6 +11,7 @@ export const HistorialRegistros = () => {
     cantidadPaquetes: 0,
     incidencias: 0,
     paquetesEntregados: 0,
+    dineroRecaudado: 0,
   })
 
   const obtenerRegistros = async () => {
@@ -44,17 +45,28 @@ export const HistorialRegistros = () => {
       cantidadPaquetes: registro.cantidadPaquetes,
       incidencias: registro.incidencias,
       paquetesEntregados: registro.paquetesEntregados,
-      dineroRecaudado: registro.dineroRecaudado,
+      dineroRecaudado: registro.paquetesEntregados * 0.50,
     })
   }
 
   const manejarCambioEdicion = (e) => {
-    const { name, value } = e.target
-    setFormularioEdicion((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }))
-  }
+    const { name, value } = e.target;
+
+    // Si se cambia la cantidad de paquetes entregados, recalcula el dinero recaudado
+    if (name === 'paquetesEntregados') {
+      const nuevosPaquetesEntregados = parseInt(value) || 0;
+      setFormularioEdicion((prevState) => ({
+        ...prevState,
+        [name]: nuevosPaquetesEntregados,
+        dineroRecaudado: nuevosPaquetesEntregados * 0.50, // Cálculo en tiempo real
+      }));
+    } else {
+      setFormularioEdicion((prevState) => ({
+        ...prevState,
+        [name]: value,
+      }));
+    }
+  };
 
   const guardarEdicion = async (id) => {
     try {
@@ -104,12 +116,7 @@ export const HistorialRegistros = () => {
                   value={formularioEdicion.paquetesEntregados}
                   onChange={manejarCambioEdicion}
                 />
-                <input
-                  type="text"
-                  value={`€${formularioEdicion.dineroRecaudado.toFixed(2)}`}
-                  onChange={manejarCambioEdicion}
-                  readOnly
-                />
+                <p>Dinero Recaudado: €{formularioEdicion.dineroRecaudado.toFixed(2)}</p>
                 <button onClick={() => guardarEdicion(registro.id)}>Guardar</button>
                 <button onClick={() => setEditando(null)}>Cancelar</button>
               </div>
