@@ -1,4 +1,3 @@
-// src/Components/InicioSesion.js
 import React, { useState } from 'react';
 import { auth } from './firebaseConfig';
 import { signInWithEmailAndPassword } from 'firebase/auth';
@@ -17,16 +16,16 @@ export const InicioSesion = () => {
     try {
       await signInWithEmailAndPassword(auth, email, password);
       alert('Sesión iniciada con éxito');
-      navigate('/')
+      navigate('/home'); // Redirige al home después de iniciar sesión
     } catch (error) {
-      setError(error.message);
+      setError("Usuario no registrado o credenciales incorrectas");
     }
   };
 
   return (
-    <div>
+    <div className="auth-container">
       <h2>Inicio de Sesión</h2>
-      <form onSubmit={handleLogin}>
+      <form onSubmit={handleLogin} className="auth-form">
         <input
           type="email"
           placeholder="Correo electrónico"
@@ -42,11 +41,11 @@ export const InicioSesion = () => {
           required
         />
         <button type="submit">Iniciar Sesión</button>
-        {error && <p>{error}</p>}
+        {error && <p className="error-message">{error}</p>}
       </form>
       <p>¿No tienes una cuenta?</p>
       <Link to="/registro">
-        <button>Regístrate</button>
+        <button className="link-button">Regístrate</button>
       </Link>
     </div>
   );

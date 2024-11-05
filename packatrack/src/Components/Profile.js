@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { auth } from './firebaseConfig';
-import { updatePassword, EmailAuthProvider, reauthenticateWithCredential } from 'firebase/auth';
+import { updatePassword, EmailAuthProvider, reauthenticateWithCredential, signOut } from 'firebase/auth';
+import { useNavigate } from 'react-router-dom';
 
 export const Profile = () => {
   const user = auth.currentUser;
   const [nuevoPassword, setNuevoPassword] = useState('');
   const [passwordActual, setPasswordActual] = useState('');
   const [mensaje, setMensaje] = useState('');
+  const navigate = useNavigate();
 
   const handleReauthenticateAndChangePassword = async () => {
     if (nuevoPassword.length < 6) {
@@ -26,6 +28,15 @@ export const Profile = () => {
       setPasswordActual('');
     } catch (error) {
       setMensaje(`Error: ${error.message}`);
+    }
+  };
+
+  const handleSignOut = async () => {
+    try {
+      await signOut(auth);
+      navigate('/inicio-sesion'); // Redirige al usuario a la página de inicio de sesión
+    } catch (error) {
+      setMensaje(`Error al cerrar sesión: ${error.message}`);
     }
   };
 
@@ -52,6 +63,10 @@ export const Profile = () => {
         />
         <button onClick={handleReauthenticateAndChangePassword}>Actualizar Contraseña</button>
         {mensaje && <p className="message">{mensaje}</p>}
+      </div>
+
+      <div className="logout-section">
+        <button onClick={handleSignOut} className="logout-button">Cerrar Sesión</button>
       </div>
     </div>
   );

@@ -1,4 +1,3 @@
-// src/Components/RegistroUsuario.js
 import React, { useState } from 'react';
 import { auth } from './firebaseConfig';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
@@ -17,16 +16,16 @@ export const RegistroUsuario = () => {
     try {
       await createUserWithEmailAndPassword(auth, email, password);
       alert('Usuario registrado con éxito');
-      navigate('/')
+      navigate('/home'); // Redirige al home después de registrarse
     } catch (error) {
-      setError(error.message);
+      setError("Este usuario ya existe");
     }
   };
 
   return (
-    <div>
+    <div className="auth-container">
       <h2>Registro de Usuario</h2>
-      <form onSubmit={handleRegister}>
+      <form onSubmit={handleRegister} className="auth-form">
         <input
           type="email"
           placeholder="Correo electrónico"
@@ -42,11 +41,11 @@ export const RegistroUsuario = () => {
           required
         />
         <button type="submit">Registrar</button>
-        {error && <p>{error}</p>}
+        {error && <p className="error-message">{error}</p>}
       </form>
       <p>¿Ya tienes una cuenta?</p>
       <Link to="/inicio-sesion">
-        <button>Inicia Sesión</button>
+        <button className="link-button">Inicia Sesión</button>
       </Link>
     </div>
   );
