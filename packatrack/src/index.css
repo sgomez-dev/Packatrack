@@ -202,7 +202,7 @@ p {
   font-family: "Helvetica Neue", Arial, sans-serif;
 }
 
-.history-container {
+.registros-list {
   display: flex;
   flex-direction: column;
   gap: 16px;
@@ -237,12 +237,12 @@ p {
 }
 
 .card button:first-of-type {
-  background-color: #d9534f; /* Rojo para eliminar */
+  background-color: #5bc0de; /* Rojo para eliminar */
   color: white;
 }
 
 .card button:last-of-type {
-  background-color: #5bc0de; /* Azul para editar */
+  background-color: #d9534f; /* Azul para editar */
   color: white;
 }
 
@@ -284,7 +284,7 @@ p {
 }
 
 @media (max-width: 768px) {
-  .history-container {
+  .registros-list {
     padding: 5px;
   }
 
@@ -335,4 +335,65 @@ p {
 .estadisticas-container p {
   margin: 10px 0;
   font-size: 1.1rem;
+}
+
+.profile-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 80vh;
+  background-color: #101d27;
+  color: #d7d7c3;
+  font-family: "Helvetica Neue", Arial, sans-serif;
+}
+
+.profile-container h2 {
+  font-size: 1.8rem;
+  margin-bottom: 20px;
+}
+
+.profile-info p {
+  font-size: 1rem;
+  margin: 10px 0;
+}
+
+.password-change {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.password-change input {
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  width: 100%; /* Ocupa todo el ancho disponible */
+  max-width: 300px; /* Limita el ancho para una mejor presentación */
+  margin-bottom: 10px;
+}
+
+.password-change button {
+  padding: 10px 15px;
+  background-color: #5bc0de;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  max-width: 300px;
+  width: 100%;
+}
+
+.password-change button:hover {
+  background-color: #31b0d5;
+}
+
+.message {
+  color: #d9534f;
+  font-weight: bold;
+  margin-top: 10px;
+  text-align: center;
+  max-width: 300px;
 }
