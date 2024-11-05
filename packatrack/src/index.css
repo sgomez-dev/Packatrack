@@ -203,10 +203,12 @@ p {
 }
 
 .history-container {
-  margin: 10px;
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
   gap: 16px;
+  padding: 20px;
+  max-height: 500px;
+  overflow-y: auto;
 }
 
 .card {
@@ -214,8 +216,12 @@ p {
   color: #f0e68c;
   border-radius: 8px;
   padding: 20px;
-  width: 250px;
+  max-width: 250px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 16px;
 }
 
 .card p {
@@ -244,11 +250,17 @@ p {
   opacity: 0.9;
 }
 
-.edit-form input {
-  display: block;
+.edit-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
   width: 100%;
-  padding: 8px;
-  margin: 8px 0;
+}
+
+.edit-form input {
+  width: 220px;
+  padding: 4px;
+  margin: 4px 0;
   border-radius: 4px;
   border: 1px solid #2a2d4b;
 }
@@ -269,4 +281,35 @@ p {
 .edit-form button:last-of-type {
   background-color: #f0ad4e; /* Naranja para cancelar */
   color: white;
+}
+
+@media (max-width: 768px) {
+  .history-container {
+    padding: 5px;
+  }
+
+  .card {
+    padding: 15px;
+    max-width: 100px;
+  }
+
+  .card p {
+    font-size: 1rem;
+  }
+
+  /* Botones adaptados para pantallas pequeñas */
+  .card button {
+    width: 100%; /* Botones a ancho completo en móviles */
+    margin: 4px 0; /* Espacio vertical entre botones */
+  }
+
+  /* Texto y botones más pequeños en el formulario de edición */
+  .edit-form input,
+  .edit-form button {
+    font-size: 14px;
+  }
+
+  .edit-form button {
+    width: 100%; /* Ancho completo de los botones en vista móvil */
+  }
 }
