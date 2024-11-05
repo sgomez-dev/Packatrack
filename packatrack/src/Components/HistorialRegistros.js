@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { db } from './firebase.config';
+import { db } from './firebaseConfig';
 import { collection, getDocs, deleteDoc, doc, updateDoc } from 'firebase/firestore';
 
 export const HistorialRegistros = () => {

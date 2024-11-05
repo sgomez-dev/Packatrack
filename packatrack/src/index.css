@@ -315,3 +315,24 @@ p {
     width: 100%; /* Ancho completo de los botones en vista móvil */
   }
 }
+
+.estadisticas-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 80vh;
+  background-color: #101d27;
+  color: #d7d7c3;
+  font-family: "Helvetica Neue", Arial, sans-serif;
+}
+
+.estadisticas-container h2 {
+  margin-bottom: 15px;
+  font-size: 1.5rem;
+}
+
+.estadisticas-container p {
+  margin: 10px 0;
+  font-size: 1.1rem;
+}

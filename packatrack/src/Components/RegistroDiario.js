@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { db } from './firebase.config';
+import { db } from './firebaseConfig';
 import { collection, addDoc } from 'firebase/firestore';
 
 export const RegistroDiario = () => {
