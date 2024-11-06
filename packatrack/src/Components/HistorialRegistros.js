@@ -1,18 +1,22 @@
 import React, { useEffect, useState } from 'react';
 import { db } from './firebaseConfig';
-import { collection, getDocs, deleteDoc, doc, updateDoc } from 'firebase/firestore';
+import { collection, getDocs, deleteDoc, doc, updateDoc, query, orderBy, where } from 'firebase/firestore';
 import { useAuth } from '../AuthContext';
+import { FaFilter } from 'react-icons/fa';
 
 export const HistorialRegistros = () => {
   const [registros, setRegistros] = useState([]);
+  const [filtroFecha, setFiltroFecha] = useState('');
+  const [orden, setOrden] = useState('desc');
+  const [filtroSeleccionado, setFiltroSeleccionado] = useState('orden');
   const { user } = useAuth();
   const [editando, setEditando] = useState(null);
   const [formularioEdicion, setFormularioEdicion] = useState({
     diaEntrega: '',
-    cantidadPaquetes: 0,
-    incidencias: 0,
-    paquetesEntregados: 0,
-    dineroRecaudado: 0,
+    cantidadPaquetes: '',
+    incidencias: '',
+    paquetesEntregados: '',
+    dineroRecaudado: '',
   });
   const [error, setError] = useState('');
 
@@ -25,7 +29,15 @@ export const HistorialRegistros = () => {
 
     try {
       const registrosCollection = collection(db, `usuarios/${user.uid}/registros`);
-      const registrosSnapshot = await getDocs(registrosCollection);
+      let q
+
+      if (filtroSeleccionado === 'fecha' && filtroFecha) {
+        q = query(registrosCollection,where('diaEntrega', '==', filtroFecha), orderBy('diaEntrega', orden))
+      } else {
+        q = query(registrosCollection, orderBy('diaEntrega', orden));
+      }
+
+      const registrosSnapshot = await getDocs(q);
       const registrosList = registrosSnapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
@@ -38,7 +50,7 @@ export const HistorialRegistros = () => {
 
   useEffect(() => {
     obtenerRegistros();
-  }, [user]);
+  }, [user, filtroFecha, orden]);
 
   // Función para eliminar un registro
   const eliminarRegistro = async (id) => {
@@ -68,13 +80,28 @@ export const HistorialRegistros = () => {
     const { name, value } = e.target;
     setFormularioEdicion((prevState) => ({
       ...prevState,
-      [name]: name === 'paquetesEntregados' ? parseInt(value) || 0 : value,
-      dineroRecaudado: name === 'paquetesEntregados' ? (parseInt(value) || 0) * 0.50 : prevState.dineroRecaudado,
+      [name]: name === 'paquetesEntregados' ? parseInt(value): value,
+      dineroRecaudado: name === 'paquetesEntregados' ? (parseInt(value)) * 0.50 : prevState.dineroRecaudado,
     }));
   };
 
   // Función para guardar los cambios en la edición
   const guardarEdicion = async (id) => {
+    // validar que los campos estén llenos
+    const { diaEntrega, cantidadPaquetes, incidencias, paquetesEntregados } = formularioEdicion
+    
+    const paquetesEntregadosInt = parseInt(paquetesEntregados)
+    const incidenciasInt = parseInt(incidencias)
+    const cantidadPaquetesInt = parseInt(cantidadPaquetes)
+    if (paquetesEntregadosInt + incidenciasInt > cantidadPaquetesInt) {
+      alert("El total entregado de paquetes e incidencias no puede exceder el total de paquetes.");
+      return
+    }
+    
+    if (!diaEntrega || !cantidadPaquetes  || !incidencias || !paquetesEntregados ) {
+      alert('Todos los campos deben estar llenos.');
+      return;
+    }
     try {
       const registroRef = doc(db, `usuarios/${user.uid}/registros`, id);
       await updateDoc(registroRef, formularioEdicion);
@@ -94,36 +121,98 @@ export const HistorialRegistros = () => {
     <div className="register-history">
       <h2>Historial de Registros</h2>
       {error && <p className="error-message">{error}</p>}
+      
+      {/* Filtro de fecha y opciones de ordenamiento */}
+      <div className="filter-section">
+        <div className="filter-options">
+          <label>
+            <input
+              type="radio"
+              value="fecha"
+              checked={filtroSeleccionado === 'fecha'}
+              onChange={() => setFiltroSeleccionado('fecha')}
+            />
+            Filtrar por Fecha
+          </label>
+          <label>
+            <input
+              type="radio"
+              value="orden"
+              checked={filtroSeleccionado === 'orden'}
+              onChange={() => setFiltroSeleccionado('orden')}
+            />
+            Ordenar por Fecha
+          </label>
+        </div>
+
+        {filtroSeleccionado === 'fecha' && (
+          <div className="filter-date">
+            <label>Fecha:</label>
+            <input
+              type="date"
+              value={filtroFecha}
+              onChange={(e) => setFiltroFecha(e.target.value)}
+            />
+          </div>
+        )}
+
+        {filtroSeleccionado === 'orden' && (
+          <div className="filter-order">
+            <label>Orden:</label>
+            <select onChange={(e) => setOrden(e.target.value)} value={orden}>
+              <option value="desc">Más reciente a más antiguo</option>
+              <option value="asc">Más antiguo a más reciente</option>
+            </select>
+          </div>
+        )}
+      </div>
+
       <div className="registros-list">
         {registros.length > 0 ? (
           registros.map((registro) => (
             <div key={registro.id} className="card">
               {editando === registro.id ? (
                 <div className="edit-form">
-                  <input
-                    type="date"
-                    name="diaEntrega"
-                    value={formularioEdicion.diaEntrega}
-                    onChange={manejarCambioEdicion}
-                  />
-                  <input
+                  <div>
+                    <label>Día de entrega:</label>
+                    <input
+                      type="date"
+                      name="diaEntrega"
+                      value={formularioEdicion.diaEntrega}
+                      onChange={manejarCambioEdicion}
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label>Cantidad de Paquetes:</label>
+                    <input
                     type="number"
                     name="cantidadPaquetes"
                     value={formularioEdicion.cantidadPaquetes}
                     onChange={manejarCambioEdicion}
+                    required
                   />
-                  <input
+                  </div>
+                  <div>
+                    <label>Cantidad de Incidencias:</label>
+                    <input
                     type="number"
                     name="incidencias"
                     value={formularioEdicion.incidencias}
                     onChange={manejarCambioEdicion}
+                    required
                   />
-                  <input
+                  </div>
+                  <div>
+                    <label>Paquetes Entregados:</label>
+                    <input
                     type="number"
                     name="paquetesEntregados"
                     value={formularioEdicion.paquetesEntregados}
                     onChange={manejarCambioEdicion}
+                    required
                   />
+                  </div>
                   <p>Dinero Recaudado: €{formularioEdicion.dineroRecaudado.toFixed(2)}</p>
                   <button onClick={() => guardarEdicion(registro.id)}>Guardar</button>
                   <button onClick={() => setEditando(null)}>Cancelar</button>
@@ -133,7 +222,7 @@ export const HistorialRegistros = () => {
                   <p><strong>Día de Entrega:</strong> {registro.diaEntrega}</p>
                   <p><strong>Cantidad de Paquetes:</strong> {registro.cantidadPaquetes}</p>
                   <p><strong>Cantidad de Incidencias:</strong> {registro.incidencias}</p>
-                  <p><strong>Cantidad de Paquetes Entregados:</strong> {registro.paquetesEntregados}</p>
+                  <p><strong>Paquetes Entregados:</strong> {registro.paquetesEntregados}</p>
                   <p><strong>Dinero Recaudado:</strong> €{registro.dineroRecaudado.toFixed(2)}</p>
                   <button onClick={() => abrirEdicion(registro)} className="edit-button">Editar</button>
                   <button onClick={() => eliminarRegistro(registro.id)} className="delete-button">Eliminar</button>

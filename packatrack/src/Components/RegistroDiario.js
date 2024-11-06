@@ -3,9 +3,9 @@ import { db, auth } from './firebaseConfig';
 import { collection, addDoc } from 'firebase/firestore';
 
 export const RegistroDiario = () => {
-  const [cantidadPaquetes, setCantidadPaquetes] = useState(0);
-  const [incidencias, setIncidencias] = useState(0);
-  const [paquetesEntregados, setPaquetesEntregados] = useState(0);
+  const [cantidadPaquetes, setCantidadPaquetes] = useState('');
+  const [incidencias, setIncidencias] = useState('');
+  const [paquetesEntregados, setPaquetesEntregados] = useState('');
   const [diaEntrega, setDiaEntrega] = useState('');
   const [error, setError] = useState('');
 
@@ -19,6 +19,11 @@ export const RegistroDiario = () => {
     // Verificar que el usuario esté autenticado
     if (!auth.currentUser) {
       setError("Debes iniciar sesión para guardar un registro.");
+      return;
+    }
+
+    if (paquetesEntregados + incidencias > cantidadPaquetes) {
+      alert("El total entregado de paquetes e incidencias no puede exceder el total de paquetes.");
       return;
     }
 
@@ -37,9 +42,9 @@ export const RegistroDiario = () => {
       alert('Registro guardado con éxito!');
 
       // Reiniciar los campos del formulario
-      setCantidadPaquetes(0);
-      setIncidencias(0);
-      setPaquetesEntregados(0);
+      setCantidadPaquetes('');
+      setIncidencias('');
+      setPaquetesEntregados('');
       setDiaEntrega('');
     } catch (error) {
       setError(`Error al guardar el registro: ${error.message}`);
@@ -65,7 +70,7 @@ export const RegistroDiario = () => {
           <input
             type="number"
             value={cantidadPaquetes}
-            onChange={(e) => setCantidadPaquetes(parseInt(e.target.value) || 0)}
+            onChange={(e) => setCantidadPaquetes(parseInt(e.target.value) || '')}
             required
           />
         </div>
@@ -75,17 +80,17 @@ export const RegistroDiario = () => {
           <input
             type="number"
             value={incidencias}
-            onChange={(e) => setIncidencias(parseInt(e.target.value) || 0)}
+            onChange={(e) => setIncidencias(parseInt(e.target.value))}
             required
           />
         </div>
 
         <div>
-          <label>Cantidad de Paquetes Entregados Totales:</label>
+          <label>Paquetes Entregados:</label>
           <input
             type="number"
             value={paquetesEntregados}
-            onChange={(e) => setPaquetesEntregados(parseInt(e.target.value) || 0)}
+            onChange={(e) => setPaquetesEntregados(parseInt(e.target.value) || '')}
             required
           />
         </div>
