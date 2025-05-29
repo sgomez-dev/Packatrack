@@ -17,7 +17,7 @@ pipeline {
         }
         stage('Deploy') {
             when {
-                branch 'master'
+                branch 'main'
             }
             steps {
                 echo '====== DEPLOYING ======'
